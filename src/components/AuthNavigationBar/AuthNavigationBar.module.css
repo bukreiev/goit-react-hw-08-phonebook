@@ -1,0 +1,18 @@
+.nav {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.main {
+    color: #7b1fa2;
+}
+
+.accent {
+    color: #e65100;
+    text-decoration: underline;
+}
+
+.link:hover {
+    color: #e65100;
+}
