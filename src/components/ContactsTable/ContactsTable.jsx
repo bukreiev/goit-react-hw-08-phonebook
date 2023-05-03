@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { filterSelector } from 'redux/filter';
 import {
   Table,
@@ -27,7 +27,7 @@ import useSnackbar from 'hooks/useSnackbar';
 import useContactForm from 'hooks/useContactForm';
 import ContactModal from 'components/ContactModal';
 import ContactsTableItem from 'components/ContactsTableItem';
-import contactsApi, {
+import {
   useGetAllContactsQuery,
   useDeleteContactByIdMutation,
 } from 'service/contactsApi';
@@ -50,11 +50,6 @@ export default function ContactsTable() {
   const { openModal, setOpenModal } = useContactForm();
   const [deleteContact, { isLoading, isSuccess, reset }] =
     useDeleteContactByIdMutation();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(contactsApi.util.resetApiState());
-  }, [dispatch]);
 
   useEffect(() => {
     if (isSuccess && deletedContact !== '') {
