@@ -9,13 +9,13 @@ import {
   Snackbar,
 } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import useContactForm from 'hooks/useContactForm';
-import useSnackbar from 'hooks/useSnackbar';
+import useContactForm from '../../hooks/useContactForm';
+import useSnackbar from '../../hooks/useSnackbar';
 import EditIcon from '@mui/icons-material/Edit';
 import {
   useEditContactByIdMutation,
   useGetAllContactsQuery,
-} from 'service/contactsApi';
+} from '../../service/contactsApi';
 import PropTypes from 'prop-types';
 
 export default function ContactModal({ contactObj, openModal, setOpenModal }) {
@@ -29,6 +29,7 @@ export default function ContactModal({ contactObj, openModal, setOpenModal }) {
   useEffect(() => {
     setName(contactObj.name);
     setNumber(contactObj.number);
+    console.log(contactObj);
   }, [contactObj, setName, setNumber]);
 
   useEffect(() => {
@@ -51,12 +52,12 @@ export default function ContactModal({ contactObj, openModal, setOpenModal }) {
       number === contactObj.number
     ) {
       return setMessage(
-        `Please make changes to contact ${name} information or press Cancel to exit Edit Contact dialog.`
+        `Please make changes to contactObj ${name} information or press Cancel to exit Edit Contact dialog.`
       );
     }
     if (
       contacts?.find(
-        contact => contact.name.toLowerCase() === name.toLowerCase()
+        contactObj => contactObj.name.toLowerCase() === name.toLowerCase()
       )
     ) {
       return setMessage(`${name} is already in Contacts List!`);

@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { filterSelector } from 'redux/filter';
 import {
@@ -40,15 +40,12 @@ export default function ContactsTable() {
   const [deletedContact, setDeletedContact] = useState('');
   const filter = useSelector(filterSelector);
   const { data = [] } = useGetAllContactsQuery();
-  const filteredContactsList = useMemo(
-    () =>
-      data
-        .filter(contact =>
-          contact.name.toLowerCase().includes(filter.toLowerCase())
-        )
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [data, filter]
-  );
+  const filteredContactsList = data
+    .filter(contact =>
+      contact.name.toLowerCase().includes(filter.toLowerCase())
+    )
+    .sort((a, b) => a.name.localeCompare(b.name));
+  console.log(filteredContactsList);
   const { open, message, setMessage, handleClose } = useSnackbar();
   const { openModal, setOpenModal } = useContactForm();
   const [deleteContact, { isLoading, isSuccess, reset }] =
@@ -114,17 +111,15 @@ export default function ContactsTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredContactsList
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map(item => (
-                <StyledTableRow key={item.id}>
-                  <ContactsTableItem
-                    contact={item}
-                    handleEdit={handleEdit}
-                    handleDelete={handleDelete}
-                  />
-                </StyledTableRow>
-              ))}
+            {filteredContactsList.map(item => (
+              <StyledTableRow key={item.id}>
+                <ContactsTableItem
+                  contact={item}
+                  handleEdit={handleEdit}
+                  handleDelete={handleDelete}
+                />
+              </StyledTableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -139,35 +134,33 @@ export default function ContactsTable() {
         sx={{ display: { xs: 'none', md: 'block' } }}
       />
       <List sx={{ display: { xs: 'block', md: 'none' } }}>
-        {filteredContactsList
-          .slice((listPage - 1) * 10, (listPage - 1) * 10 + 10)
-          .map(item => (
-            <ListItem key={item.id}>
-              <ListItemText>
-                {item.name}: {item.number}
-              </ListItemText>
-              <ButtonGroup
-                variant="contained"
-                aria-label="edit/delete contact button group"
+        {filteredContactsList.map(item => (
+          <ListItem key={item.id}>
+            <ListItemText>
+              {item.name}: {item.number}
+            </ListItemText>
+            <ButtonGroup
+              variant="contained"
+              aria-label="edit/delete contact button group"
+            >
+              <Button
+                onClick={() => handleEdit(item)}
+                variant="outlined"
+                aria-label="Edit Contact"
               >
-                <Button
-                  onClick={() => handleEdit(item)}
-                  variant="outlined"
-                  aria-label="Edit Contact"
-                >
-                  <EditIcon />
-                </Button>
-                <LoadingButton
-                  onClick={() => handleDelete(item.id, item.name)}
-                  variant="contained"
-                  loading={isLoading}
-                  aria-label="Delete Contact"
-                >
-                  <DeleteIcon />
-                </LoadingButton>
-              </ButtonGroup>
-            </ListItem>
-          ))}
+                <EditIcon />
+              </Button>
+              <LoadingButton
+                onClick={() => handleDelete(item.id, item.name)}
+                variant="contained"
+                loading={isLoading}
+                aria-label="Delete Contact"
+              >
+                <DeleteIcon />
+              </LoadingButton>
+            </ButtonGroup>
+          </ListItem>
+        ))}
       </List>
       <Box
         my={2}
